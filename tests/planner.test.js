@@ -90,7 +90,8 @@ test('two-move reserve unlocks only at two and stale entire chains are rejected'
   const p=new DecisionPipeline(async g=>choose(g)),g=new Game();p.depth=2;
   const result=await p.get(g);p.prepare(g,result);await flush();
   assert.equal(p.readyCount(g,result),2);assert.equal(p.canDrop(g,result),true);
-  g.board[19][9]=g.board[19][9]?0:'G';assert.equal(p.canDrop(g,result),false);
+  // Keep the changed cell above any opening landing so placement cannot overwrite it.
+  g.board[10][9]='G';assert.equal(p.canDrop(g,result),false);
   p.invalidate();assert.equal(p.futures.length,0);assert.equal(p.canDrop(g,result),false);
 });
 
