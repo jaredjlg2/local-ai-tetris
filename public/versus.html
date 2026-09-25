@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>STACK / Local AI Tetris</title><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/versus.css"></head>
+<body>
+<header><a class="brand" href="/" aria-label="Stack home"><span class="brand-icon">▦</span> STACK<span class="brand-sub">/ VERSUS</span></a><div class="top-status"><span class="dot" id="model-dot"></span><span id="model-status">Checking local models…</span><span class="local-tag">ON DEVICE</span></div></header>
+<main>
+<div class="intro"><div><div class="eyebrow">ONE SEQUENCE. TWO PLAYERS. CHOOSE YOUR CHALLENGE.</div><h1 id="match-title">Human versus Laya.</h1><p>Play a model. Or watch two models compete.</p></div><div class="match-clock"><label id="clock-label">TIME SURVIVED</label><strong id="clock">00:00</strong></div></div>
+<div class="versus-workspace">
+<aside class="settings panel">
+ <div class="panel-heading"><h2>Match setup</h2><span class="tiny" id="mode-tag">SURVIVAL</span></div>
+ <nav class="play-modes"><a href="/">Solo / takeover</a><a class="active" href="/versus">Versus arena</a></nav>
+<div class="range-label"><label for="left-player">LEFT PLAYER</label></div><select id="left-player"><option value="human">Human</option><option value="laya">Laya</option><option value="von">Von 1.2</option></select><div class="range-label"><label for="model-choice">RIGHT PLAYER</label></div><select id="model-choice"><option value="laya">Laya</option><option value="von">Von 1.2</option><option value="human">Human</option></select><p class="helper">Choose either model on either board, including the same model twice. Players lock when the match starts.</p>
+ <label for="match-mode">WIN CONDITION</label><select id="match-mode"><option value="survival">Survival · last standing</option><option value="lines">Line race</option><option value="score">Score race</option><option value="timed">Score attack · timed</option></select>
+ <div id="target-setting" hidden><div class="range-label"><label for="match-target" id="target-label">Lines to clear</label></div><select id="match-target"></select></div>
+ <div class="rule-card"><span class="live-dot"></span> <span id="rule-title">Last player standing</span><p id="rule-description">The first board to top out loses. Both players get the same piece sequence, starting garbage, and fall speed.</p></div>
+ <label for="difficulty">DIFFICULTY</label><select id="difficulty"><option value="easy">Easy · room to think</option><option value="normal" selected>Normal · find your flow</option><option value="hard">Hard · under pressure</option><option value="expert">Expert · no hesitation</option></select>
+ <div class="range-label"><label for="speed">Fall speed · both boards</label><strong id="speed-value">1.4 <small>cells/s</small></strong></div><input id="speed" type="range" min="0.5" max="20" step="0.1" value="1.4">
+ <div class="range-label"><label for="garbage">Starting garbage</label><strong id="garbage-value">0 <small>rows</small></strong></div><input id="garbage" type="range" min="0" max="10" step="1" value="0">
+ <p class="helper">Match settings lock at the start. Gravity keeps running while the models decide. No garbage attacks.</p>
+ <div class="divider"></div>
+ <label class="check"><input type="checkbox" id="lookahead" checked><span>Build a survival queue for each AI</span></label>
+ <div class="range-label"><label for="queue-depth">Ready moves before hard drop</label></div><select id="queue-depth"><option value="2">2 upcoming moves</option><option value="3" selected>3 upcoming moves · safer reserve</option></select>
+ <p class="helper">Align now, fall naturally while planning, then hard-drop when the reserve is full. With planning off, each AI uses normal gravity.</p>
+ <button class="primary wide" id="start-match" disabled>Start match ↗</button><button class="secondary wide" id="pause-match" disabled>Pause both Ⅱ</button>
+ <p id="match-seed" class="helper">A shared sequence is generated for each match.</p>
+ <div class="controls"><span>← → <b>Move</b></span><span>↑ / X <b>Rotate</b></span><span>↓ <b>Soft drop</b></span><span>SPACE <b>Drop</b></span><span>C <b>Hold</b></span><span>P / ESC <b>Pause both</b></span><span>Z <b>Rotate left</b></span></div>
+</aside>
+<section class="match-stage">
+ <div class="match-banner" id="match-banner" role="status">Ready when you are. Your board is on the left.</div>
+ <div class="match-progress" id="match-progress" aria-live="polite"></div>
+ <div class="duel-boards">
+  <section class="duel-board panel human-board" aria-label="Left Tetris board"><div class="player-heading"><span id="human-type">01 / HUMAN</span><h2><span id="human-name">Human</span><span>▦</span></h2></div><div class="duel-stats"><div><label>SCORE</label><strong id="human-score">000000</strong></div><div><label>LINES</label><strong id="human-lines">0</strong></div></div><canvas id="human-board" width="300" height="600" aria-label="Human game grid"></canvas><div class="duel-preview"><div><label>NEXT</label><canvas id="human-next" width="170" height="50"></canvas></div><div><label>HOLD</label><canvas id="human-hold" width="70" height="50"></canvas></div></div><div class="player-footer"><span id="human-state">Ready</span><span><b id="human-pieces">0</b> pieces</span></div></section>
+  <section class="duel-board panel ai-board" aria-label="Right Tetris board"><div class="player-heading"><span id="ai-type">02 / LOCAL AI</span><h2><span id="ai-name">Laya</span><span>✳</span></h2></div><div class="duel-stats"><div><label>SCORE</label><strong id="ai-score">000000</strong></div><div><label>LINES</label><strong id="ai-lines">0</strong></div></div><canvas id="ai-board" width="300" height="600" aria-label="Laya game grid"></canvas><div class="duel-preview"><div><label>NEXT</label><canvas id="ai-next" width="170" height="50"></canvas></div><div><label>HOLD</label><canvas id="ai-hold" width="70" height="50"></canvas></div></div><div class="player-footer"><span id="ai-state">Ready</span><span><b id="ai-pieces">0</b> pieces</span></div></section>
+ </div>
+ <p class="fair-note" id="control-label">Controls: left board</p><div id="human-controls"><select id="human-control-choice" aria-label="Human board to control" hidden><option value="0">Control left human</option><option value="1">Control right human</option></select><div class="touch-controls versus-touch"><button data-action="left" aria-label="Move left">←</button><button data-action="rotate" aria-label="Rotate">↻</button><button data-action="right" aria-label="Move right">→</button><button data-action="down" aria-label="Soft drop">↓</button><button data-action="drop">Drop</button><button data-action="hold">Hold</button></div>
+ </div><p class="fair-note">Same pieces and gravity. Each AI plans independently. Identical models share a runtime and take turns requesting decisions. Pause stops both boards.</p>
+</section>
+<aside class="decisions panel">
+ <div class="panel-heading"><h2 id="panel-title">Game plan</h2><span class="tiny" id="runtime-device">LOCAL</span></div>
+ <div class="segmented watch-boards" aria-label="Board to inspect"><button id="watch-left">Left</button><button id="watch-right" class="selected">Right</button></div><div class="brain-status"><span class="dot" id="brain-dot"></span><span id="brain-state">Waiting for the match</span></div>
+ <div class="decision-stats"><div><label>DECISIONS</label><strong id="decision-count">0</strong></div><div><label>LAST INFERENCE</label><strong id="latency">— ms</strong></div></div>
+ <div class="pipeline-card"><div class="label-row"><label>SURVIVAL QUEUE</label><span class="tiny">PLAN → PLACE</span></div><strong id="pipeline-status">0/3 ready</strong><p id="pipeline-hits">0 reused · 0 ready before needed</p><p id="decision-wait">No decision yet</p></div>
+ <div id="latest" class="latest empty"><div class="empty-symbol">⌘</div><h3>Watch your opponent think.</h3><p>Actual model probabilities, predicted outcomes, and the next move in preparation.</p></div>
+ <div class="feed-heading"><label>DECISION HISTORY</label><button id="export" class="text-button">Export ↗</button></div><div id="history" class="history"><p class="history-empty">The match has yet to begin.</p></div>
+ <details class="how"><summary>How survival planning works</summary><p>Each AI aligns the current piece first and uses its normal fall time to plan a chain of two or three upcoming placements. It only accelerates the descent when that many moves are ready. Gravity can still lock a piece naturally before the queue fills.</p><p>Each decision sees the board produced by the preceding placement, including line clears. Ready moves are consumed in order and the reserve is replenished. Actual board, piece, turn, and reachability must still match; stale dependent plans are discarded.</p><p>The engine filters next-spawn collisions, preserves headroom when possible, and removes inferior landings. The selected model chooses within that safe shortlist. The panel labels a sole safe choice as forced. This is planning a conditional sequence, not a guarantee of survival.</p></details>
+</aside>
+</div><footer><span><span class="footer-mark">▦</span> SAME PIECES. DIFFERENT INSTINCTS.</span><span>Laya + Von / Local inference <i>·</i> No API key</span></footer>
+</main><script type="module" src="/versus.js"></script></body></html>

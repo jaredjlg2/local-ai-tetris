@@ -1,0 +1,23 @@
+{
+  "name": "local-ai-tetris",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local Tetris with human, Laya and Von players, model duels and inspectable decisions.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "setup:laya": "node setup-model.js",
+    "test": "node --test tests/*.test.js",
+    "test:browser": "node tests/versus-browser.mjs",
+    "test:duel": "node tests/duel-browser.mjs"
+  },
+  "dependencies": {
+    "@receptron/laya": "0.1.2"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}

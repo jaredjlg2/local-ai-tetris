@@ -1,0 +1,46 @@
+[
+  {
+    "state": "Tetris. Current piece T. Choose a placement to survive and clear lines. Avoid holes first, then prefer line clears and a low, smooth stack. Holes are empty cells underneath blocks. Each option is a legal simulated landing. Outcomes:\nA: clears 0 lines, 0 total holes, maximum height 2, total height 4, unevenness 2.\nB: clears 0 lines, 1 total holes, maximum height 3, total height 5, unevenness 3.",
+    "questions": {
+      "move": {
+        "type": "choice",
+        "instructions": "Which landing is best for long-term Tetris survival? Minimize holes, clear lines, and keep the stack low.",
+        "criteria": {
+          "A": "Landing A",
+          "B": "Landing B"
+        }
+      }
+    }
+  },
+  {
+    "state": "Tetris. Current piece T. Choose a placement to survive and clear lines. Avoid holes first, then prefer line clears and a low, smooth stack. Holes are empty cells underneath blocks. Each option is a legal simulated landing. Outcomes:\nA: clears 0 lines, 0 total holes, maximum height 2, total height 4, unevenness 2.\nB: clears 0 lines, 1 total holes, maximum height 3, total height 5, unevenness 3.\nC: clears 0 lines, 0 total holes, maximum height 4, total height 6, unevenness 4.",
+    "questions": {
+      "move": {
+        "type": "choice",
+        "instructions": "Which landing is best for long-term Tetris survival? Minimize holes, clear lines, and keep the stack low.",
+        "criteria": {
+          "A": "Landing A",
+          "B": "Landing B",
+          "C": "Landing C"
+        }
+      }
+    }
+  },
+  {
+    "state": "Tetris. Current piece T. Choose a placement to survive and clear lines. Avoid holes first, then prefer line clears and a low, smooth stack. Holes are empty cells underneath blocks. Each option is a legal simulated landing. Outcomes:\nA: clears 0 lines, 0 total holes, maximum height 2, total height 4, unevenness 2.\nB: clears 0 lines, 1 total holes, maximum height 3, total height 5, unevenness 3.\nC: clears 0 lines, 0 total holes, maximum height 4, total height 6, unevenness 4.\nD: clears 0 lines, 1 total holes, maximum height 5, total height 7, unevenness 5.\nE: clears 0 lines, 0 total holes, maximum height 6, total height 8, unevenness 6.\nF: clears 0 lines, 1 total holes, maximum height 7, total height 9, unevenness 7.",
+    "questions": {
+      "move": {
+        "type": "choice",
+        "instructions": "Which landing is best for long-term Tetris survival? Minimize holes, clear lines, and keep the stack low.",
+        "criteria": {
+          "A": "Landing A",
+          "B": "Landing B",
+          "C": "Landing C",
+          "D": "Landing D",
+          "E": "Landing E",
+          "F": "Landing F"
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>STACK / Local AI Tetris</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+<header><a class="brand" href="/" aria-label="Stack home"><span class="brand-icon">▦</span> STACK<span class="brand-sub">/ TETRIS LAB</span></a><div class="top-status"><span class="dot" id="model-dot"></span><span id="model-status">Loading <span data-model-name>Laya</span> locally…</span><span class="local-tag">ON DEVICE</span></div></header>
+<main>
+<div class="intro"><div><div class="eyebrow">HUMAN INSTINCT. MACHINE DECISIONS.</div><h1>Your move. <span>Or <span data-model-name>Laya</span>’s.</span></h1><p>Play a little. Hand over the controls. Watch every decision.</p></div><div class="session"><span class="live-dot"></span> LOCAL PLAYGROUND <small>01 / TETRIS</small></div></div>
+<div class="workspace">
+<aside class="settings panel">
+  <div class="panel-heading"><h2>Control room</h2><span class="tiny">01</span></div>
+  <nav class="play-modes"><a class="active" href="/">Solo / takeover</a><a href="/versus">Versus arena ↗</a></nav>
+<div class="range-label"><label for="model-choice">LOCAL AI MODEL</label></div><select id="model-choice"><option value="laya">Laya</option><option value="von">Von 1.2</option></select><p class="helper">Both models run on this PC. Switching returns control to you.</p>
+  <div class="label-row"><label>WHO’S PLAYING</label><span id="mode-tag">YOU</span></div>
+  <div class="segmented"><button id="manual" class="selected">⌨ &nbsp; Manual</button><button id="autopilot">✳ &nbsp; <span data-model-name>Laya</span></button></div>
+  <p class="helper" id="mode-help">You’re in control. Switch to <span data-model-name>Laya</span> anytime.</p>
+  <div class="divider"></div>
+  <div class="label-row"><label for="difficulty">DIFFICULTY</label></div>
+  <select id="difficulty"><option value="easy">Easy · room to think</option><option value="normal" selected>Normal · find your flow</option><option value="hard">Hard · under pressure</option><option value="expert">Expert · no hesitation</option></select>
+  <div class="range-label"><label for="speed">Fall speed</label><strong id="speed-value">1.4 <small>cells/s</small></strong></div>
+  <input id="speed" type="range" min="0.5" max="20" step="0.1" value="1.4"><div class="range-ends"><span>SLOW</span><span>FAST</span></div>
+  <label class="check"><input type="checkbox" id="progressive" checked><span>Speed up as levels increase</span></label>
+  <div class="range-label"><label for="garbage">Starting garbage</label><strong id="garbage-value">0 <small>rows</small></strong></div>
+  <input id="garbage" type="range" min="0" max="10" step="1" value="0"><p class="helper">Applied when you start a new game.</p>
+  <div class="divider"></div>
+  <div class="label-row"><label><span data-model-upper>LAYA</span> SETTINGS</label><span class="tiny" id="runtime-device">LOCAL MODEL</span></div>
+  <div class="range-label"><label for="pace">Time between pieces</label><strong id="pace-value">0.5 <small>s</small></strong></div>
+  <input id="pace" type="range" min="0" max="2" step="0.1" value="0.5">
+  <label class="check"><input type="checkbox" id="wait"><span>Pause for the current decision only</span></label>
+  <p class="helper">Turn off to test <span data-model-name>Laya</span> against a running clock.</p>
+  <label class="check"><input type="checkbox" id="lookahead" checked><span>Build a survival queue before dropping</span></label>
+  <div class="range-label"><label for="queue-depth">Ready moves before hard drop</label></div><select id="queue-depth"><option value="2">2 upcoming moves</option><option value="3" selected>3 upcoming moves · safer reserve</option></select>
+  <p class="helper">Align first, then fall naturally while planning. Hard drop unlocks when the reserve is full. With planning off, <span data-model-name>Laya</span> uses normal gravity.</p>
+  <p class="helper" id="pipeline-status">No next plan queued</p><p class="helper" id="pipeline-hits">0 reused · 0 ready before needed</p>
+  <div class="divider"></div>
+  <button id="new-game" class="secondary wide">↻ &nbsp; New game</button>
+  <div class="controls"><span>← → <b>Move</b></span><span>↑ / X <b>Rotate</b></span><span>↓ <b>Soft drop</b></span><span>SPACE <b>Drop</b></span><span>C <b>Hold</b></span><span>P <b>Pause</b></span><span>Z <b>Rotate left</b></span><span>ESC <b>Take control</b></span></div>
+</aside>
+<section class="arena panel" aria-label="Tetris game">
+  <div class="arena-bar"><span><i class="live-dot"></i> <span id="game-state">READY TO PLAY</span></span><button id="pause" class="text-button">Pause Ⅱ</button></div>
+  <div class="score-strip"><div><label>SCORE</label><strong id="score">000000</strong></div><div><label>LINES</label><strong id="lines">0</strong></div><div><label>LEVEL</label><strong id="level">01</strong></div></div>
+  <div class="play-area"><div class="board-wrap"><canvas id="board" width="300" height="600" aria-label="Tetris board"></canvas><div class="overlay" id="overlay"><span class="overlay-icon">▦</span><h2 id="overlay-title">Find your flow.</h2><p id="overlay-text">A clean board. Endless possibilities.</p><button id="start" class="primary">Start playing ↗</button></div></div><div class="piece-rail"><label>NEXT</label><canvas id="next" width="80" height="250"></canvas><div class="rail-divider"></div><label>HOLD</label><canvas id="hold" width="80" height="70"></canvas><div class="rail-note"><span id="pieces">0</span>PIECES<br>PLACED</div></div></div>
+  <div class="board-footer"><span id="controller"><span class="amber-dot"></span> Manual control</span><span id="actual-speed">1.4 cells / second</span></div>
+  <div class="touch-controls"><button data-action="left" aria-label="Move left">←</button><button data-action="rotate" aria-label="Rotate">↻</button><button data-action="right" aria-label="Move right">→</button><button data-action="down" aria-label="Soft drop">↓</button><button data-action="drop">Drop</button><button data-action="hold">Hold</button></div>
+</section>
+<aside class="decisions panel">
+  <div class="panel-heading"><h2><span class="ai-icon">✳</span> Inside the decision</h2><span class="tiny">LIVE</span></div>
+  <div class="brain-status"><span class="dot" id="brain-dot"></span><span id="brain-state">Waiting for the handoff</span></div>
+  <div class="decision-stats"><div><label>DECISIONS</label><strong id="decision-count">0</strong></div><div><label>LAST INFERENCE</label><strong id="latency">— <small>ms</small></strong></div></div>
+  <p class="helper" id="decision-wait">Inference runs ahead; waiting time is shown separately.</p>
+  <div id="latest" class="latest empty"><div class="empty-symbol">⌘</div><h3>A front-row seat to <span data-model-name>Laya</span>.</h3><p>Switch to <span data-model-name>Laya</span> to see its chosen landing, option probabilities, and predicted board effects.</p><span>GAME STATE → <span data-model-upper>LAYA</span> → MOVE</span></div>
+  <div class="feed-heading"><label>DECISION HISTORY</label><button id="export" class="text-button">Export ↗</button></div>
+  <div id="history" class="history"><p class="history-empty">Every move leaves a trace.</p></div>
+  <details class="how"><summary>What is <span data-model-name>Laya</span> deciding?</summary><p>The engine protects the next piece's spawn and stack headroom, then filters holes and strictly worse outcomes. <span data-model-name>Laya</span> chooses among the surviving legal landings. A single safe option is labeled forced; an inferior option is never added just to offer a choice.</p><p><span data-model-name>Laya</span> aligns the current piece while planning two or three future placements in sequence. It uses normal gravity until that reserve is ready. Every queued placement is checked against the predicted board; a mismatch invalidates dependent plans.</p><p>Probabilities come from <span data-model-name>Laya</span>; board effects come from the game. The optional pause affects the current decision only, never reserve building. Escape returns control to you.</p></details>
+</aside>
+</div>
+<footer><span><span class="footer-mark">▦</span> BUILT FOR THE HANDOFF</span><span>Local models <i>·</i> Local inference <i>·</i> No API key</span></footer>
+</main><script type="module" src="/app.js"></script></body></html>

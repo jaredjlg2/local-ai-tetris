@@ -1,0 +1,6 @@
+{
+  "name": "Intel GPU acceleration",
+  "executionProviders": ["webgpu", "cpu"],
+  "sessionOptions": { "intraOpNumThreads": 4 },
+  "precision": "FP32"
+}

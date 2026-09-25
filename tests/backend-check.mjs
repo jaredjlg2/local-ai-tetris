@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+const url='http://127.0.0.1:8776/api/decide';
+const board=Array.from({length:20},()=>Array.from({length:10},(_,x)=>x===5?0:'G'));
+const response=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({board,active:{type:'I',r:1,x:3,y:0}})});
+const result=await response.json();assert.equal(response.status,200,JSON.stringify(result));
+assert.equal(result.constrained,true);assert.equal(result.candidates.length,1);
+assert.equal(result.answer.probabilities.A,1);assert.ok(Object.hasOwn(result.rawAnswer.probabilities,'EQUIVALENT'));
+const malformed=await fetch(url,{method:'POST',body:'{}'});assert.equal(malformed.status,400);
+const foreign=await fetch(url,{method:'POST',headers:{Origin:'https://example.com'},body:'{}'});assert.equal(foreign.status,403);
+console.log('Passed: single-landing inference, preserved raw probabilities, malformed-state rejection, cross-origin rejection.');

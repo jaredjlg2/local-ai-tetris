@@ -1,0 +1,16 @@
+node_modules/
+.tools/
+models/
+*.log
+test-results/
+.venv-von/
+von-backend-reference.py
+__pycache__/
+*.py[cod]
+.env
+.env.*
+.venv/
+playwright-report/
+*.partial
+.DS_Store
+Thumbs.db
